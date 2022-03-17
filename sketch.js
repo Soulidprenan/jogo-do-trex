@@ -4,11 +4,18 @@ var trexAnimation;
 var piso;
 var pisoImage;
 var pisoInvisivel;
+var nuvens;
+var nuvensImage;
+var nuvensGroup;
 
 function preload(){
     trexAnimation=loadAnimation("trex1.png", "trex2.png","trex3.png");
     
     pisoImage=loadImage("ground2.png");
+
+    nuvensImage=loadImage("cloud.png");
+
+
 }
 
 function setup() {
@@ -24,6 +31,8 @@ function setup() {
 
     pisoInvisivel=createSprite(300,190,width,10);
     pisoInvisivel.visible=false;
+
+    nuvensGroup=createGroup();
 }
 
 function draw() {
@@ -43,6 +52,21 @@ function draw() {
     if(piso.x < 0) {
         piso.x = piso.width /2;
     }
-
+    criarNuvens();
     drawSprites();
+}
+function criarNuvens(){
+    if(frameCount % 60 == 0){
+       nuvens=createSprite(600,100,40,10);
+        nuvens.velocityX=-3;
+        nuvens.addImage(nuvensImage);
+        nuvens.y=Math.round(random(30,80));
+        nuvens.depth = trexSprite.depth;
+        trexSprite.depth=trexSprite.depth+1;
+        nuvensGroup.add(nuvens);
+        console.log(nuvensGroup)
+    }
+   
+
+
 }
