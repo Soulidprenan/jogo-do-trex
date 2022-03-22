@@ -15,7 +15,9 @@ function preload(){
 
     nuvensImage=loadImage("cloud.png");
 
-
+    // string -> "2"
+    // number 2 5
+    // boolean true| false
 }
 
 function setup() {
@@ -33,6 +35,7 @@ function setup() {
     pisoInvisivel.visible=false;
 
     nuvensGroup=createGroup();
+
 }
 
 function draw() {
@@ -59,14 +62,12 @@ function criarNuvens(){
     if(frameCount % 60 == 0){
        nuvens=createSprite(600,100,40,10);
         nuvens.velocityX=-3;
+        nuvens.lifetime=width/-nuvens.velocityX+50;
         nuvens.addImage(nuvensImage);
         nuvens.y=Math.round(random(30,80));
         nuvens.depth = trexSprite.depth;
         trexSprite.depth=trexSprite.depth+1;
         nuvensGroup.add(nuvens);
-        console.log(nuvensGroup)
+        console.log(nuvens.lifetime)
     }
-   
-
-
 }
