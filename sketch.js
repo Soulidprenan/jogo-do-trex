@@ -8,6 +8,7 @@ var nuvensImage;
 var nuvensGroup;
 var cacto;
 var obstacle1, obstacle2, obstacle3, obstacle4, obstacle5, obstacle6;
+var pontuacao=0;
 
 function preload() {
   trexAnimation = loadAnimation("trex1.png", "trex2.png", "trex3.png");
@@ -52,7 +53,10 @@ function setup() {
 
 function draw() {
   background("white");
+  pontuacao=pontuacao + Math.round(getFrameRate()/25);
+  text("pontuação: "+pontuacao,500,50);
   piso.velocityX = -4;
+  pontuacao=0;
 
   // gravidade do trex
   trexSprite.velocityY = trexSprite.velocityY + 0.5;
