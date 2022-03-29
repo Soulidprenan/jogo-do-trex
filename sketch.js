@@ -8,16 +8,21 @@ var nuvensImage;
 var nuvensGroup;
 var cacto;
 var obstacle1, obstacle2, obstacle3, obstacle4, obstacle5, obstacle6;
-var pontuacao=0;
+var pontuacao = 0;
 var cactosGroup;
+var trexCollide;
+var gameOver;
+var restart;
+var gameOverImg;
+var restartImg;
 
 const ENCERRAR = 1;
 const JOGANDO = 0;
 var estado = JOGANDO;
 
-
 function preload() {
   trexAnimation = loadAnimation("trex1.png", "trex2.png", "trex3.png");
+  trexCollide = loadAnimation("trex_collided.png");
 
   pisoImage = loadImage("ground2.png");
 
@@ -35,6 +40,9 @@ function preload() {
 
   obstacle6 = loadImage("obstacle6.png");
 
+  gameOverImg = loadImage("gameOver.png");
+  restartImg = loadImage("restart.png");
+
   // string -> "2"
   // number 2 5
   // boolean true| false
@@ -46,8 +54,9 @@ function setup() {
   trexSprite = createSprite(35, 150, 20, 50);
   trexSprite.scale = 0.5;
   trexSprite.addAnimation("correndo", trexAnimation);
+  trexSprite.addAnimation("chorando", trexCollide);
   //trexSprite.debug=true
-  trexSprite.setCollider("circle",-1,0,40);
+  trexSprite.setCollider("circle", -1, 0, 40);
 
   piso = createSprite(300, 175, width, 20);
   piso.x = piso.width / 2;
@@ -56,24 +65,30 @@ function setup() {
   pisoInvisivel = createSprite(300, 190, width, 10);
   pisoInvisivel.visible = false;
 
+  gameOver = createSprite(300, 100);
+  gameOver.addImage("gameOver", gameOverImg);
+  gameOver.scale = 0.5;
+
+  restart = createSprite(300, 130);
+  restart.addImage("restart", restartImg);
+  restart.scale = 0.3;
+
   nuvensGroup = createGroup();
   cactosGroup = createGroup();
 }
 
 function draw() {
   background("white");
-  
-  text("pontuação: "+pontuacao,500,50);
-  
 
+  text("pontuação: " + pontuacao, 500, 50);
 
- 
- 
   drawSprites();
 
-  if(estado == JOGANDO) {
-    pontuacao=pontuacao + Math.round(getFrameRate()/25);
+  if (estado == JOGANDO) {
+    pontuacao = pontuacao + Math.round(getFrameRate() / 25);
     piso.velocityX = -4;
+    gameOver.visible=false;
+    restart.visible=false;
     // gravidade do trex
     trexSprite.velocityY = trexSprite.velocityY + 0.5;
     if (keyIsDown(32) && trexSprite.y > 161) {
@@ -86,18 +101,23 @@ function draw() {
     }
     criarNuvens();
     criarCactos();
-    if(trexSprite.isTouching(cactosGroup)){
+    if (trexSprite.isTouching(cactosGroup)) {
       estado = ENCERRAR;
     }
-  } else if(estado == ENCERRAR) {
+  } else if (estado == ENCERRAR) {
     cactosGroup.setVelocityXEach(0);
     nuvensGroup.setVelocityXEach(0);
     piso.velocityX = 0;
     nuvensGroup.setLifetimeEach(-1);
     cactosGroup.setLifetimeEach(-1);
-    trexSprite.velocityY=0;
-   
+    trexSprite.velocityY = 0;
+    trexSprite.changeAnimation("chorando");
+    gameOver.visible=true;
+    restart.visible=true;
 
+    if (mousePressedOver(restart)) {
+      reset();
+    }
   }
 }
 function criarNuvens() {
@@ -144,4 +164,11 @@ function criarCactos() {
     cacto.scale = 0.6;
     cactosGroup.add(cacto);
   }
+}
+function reset() {
+  estado = JOGANDO;
+  nuvensGroup.destroyEach();
+  cactosGroup.destroyEach();
+  trexSprite.changeAnimation("correndo");
+  pontuacao = 0;
 }
