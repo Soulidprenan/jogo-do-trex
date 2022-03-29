@@ -46,6 +46,8 @@ function setup() {
   trexSprite = createSprite(35, 150, 20, 50);
   trexSprite.scale = 0.5;
   trexSprite.addAnimation("correndo", trexAnimation);
+  //trexSprite.debug=true
+  trexSprite.setCollider("circle",-1,0,40);
 
   piso = createSprite(300, 175, width, 20);
   piso.x = piso.width / 2;
@@ -91,6 +93,9 @@ function draw() {
     cactosGroup.setVelocityXEach(0);
     nuvensGroup.setVelocityXEach(0);
     piso.velocityX = 0;
+    nuvensGroup.setLifetimeEach(-1);
+    cactosGroup.setLifetimeEach(-1);
+    trexSprite.velocityY=0;
    
 
   }
