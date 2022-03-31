@@ -15,6 +15,9 @@ var gameOver;
 var restart;
 var gameOverImg;
 var restartImg;
+var jumpSound;
+var dieSound;
+var pointSound;
 
 const ENCERRAR = 1;
 const JOGANDO = 0;
@@ -42,6 +45,12 @@ function preload() {
 
   gameOverImg = loadImage("gameOver.png");
   restartImg = loadImage("restart.png");
+
+  jumpSound = loadSound("jump.mp3");
+  dieSound = loadSound("die.mp3");
+  pointSound = loadSound("checkPoint.mp3");
+
+
 
   // string -> "2"
   // number 2 5
@@ -86,23 +95,31 @@ function draw() {
 
   if (estado == JOGANDO) {
     pontuacao = pontuacao + Math.round(getFrameRate() / 25);
-    piso.velocityX = -4;
+    piso.velocityX = -(4+3*pontuacao/100);
+  
     gameOver.visible=false;
     restart.visible=false;
     // gravidade do trex
     trexSprite.velocityY = trexSprite.velocityY + 0.5;
     if (keyIsDown(32) && trexSprite.y > 161) {
-      trexSprite.velocityY = -10;
+      trexSprite.velocityY = -11;
+      jumpSound.play();
     }
     trexSprite.collide(pisoInvisivel);
     // reset do chão
     if (piso.x < 0) {
       piso.x = piso.width / 2;
     }
+    if (pontuacao % 100 == 0 && pontuacao != 0){
+      pointSound.play();
+
+    }
     criarNuvens();
     criarCactos();
     if (trexSprite.isTouching(cactosGroup)) {
       estado = ENCERRAR;
+      dieSound.play();
+      
     }
   } else if (estado == ENCERRAR) {
     cactosGroup.setVelocityXEach(0);
@@ -135,7 +152,7 @@ function criarNuvens() {
 function criarCactos() {
   if (frameCount % 90 == 0) {
     cacto = createSprite(600, 165, 10, 40);
-    cacto.velocityX = -4;
+    cacto.velocityX = -(4 + pontuacao/100);
     cacto.lifetime = width / -cacto.velocityX + 50;
     var number = Math.round(random(1, 6));
     switch (number) {
@@ -163,6 +180,7 @@ function criarCactos() {
     }
     cacto.scale = 0.6;
     cactosGroup.add(cacto);
+    
   }
 }
 function reset() {
