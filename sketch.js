@@ -3,10 +3,9 @@ var trexAnimation;
 var piso;
 var pisoImage;
 var pisoInvisivel;
-var nuvens;
 var nuvensImage;
 var nuvensGroup;
-var cacto;
+
 var obstacle1, obstacle2, obstacle3, obstacle4, obstacle5, obstacle6;
 var pontuacao = 0;
 var cactosGroup;
@@ -139,7 +138,7 @@ function draw() {
 }
 function criarNuvens() {
   if (frameCount % 60 == 0) {
-    nuvens = createSprite(600, 100, 40, 10);
+    var nuvens = createSprite(600, 100, 40, 10);
     nuvens.velocityX = -3;
     nuvens.lifetime = width / -nuvens.velocityX + 50;
     nuvens.addImage(nuvensImage);
@@ -151,7 +150,7 @@ function criarNuvens() {
 }
 function criarCactos() {
   if (frameCount % 90 == 0) {
-    cacto = createSprite(600, 165, 10, 40);
+    var cacto = createSprite(600, 165, 10, 40);
     cacto.velocityX = -(4 + pontuacao/100);
     cacto.lifetime = width / -cacto.velocityX + 50;
     var number = Math.round(random(1, 6));
