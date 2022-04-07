@@ -57,7 +57,7 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(600, 200);
+  createCanvas(windowWidth,windowHeight);
   // X, Y, WIDTH, HEIGHT
   trexSprite = createSprite(35, 150, 20, 50);
   trexSprite.scale = 0.5;
@@ -73,11 +73,11 @@ function setup() {
   pisoInvisivel = createSprite(300, 190, width, 10);
   pisoInvisivel.visible = false;
 
-  gameOver = createSprite(300, 100);
+  gameOver = createSprite(width/2, 100);
   gameOver.addImage("gameOver", gameOverImg);
   gameOver.scale = 0.5;
 
-  restart = createSprite(300, 130);
+  restart = createSprite(width/2, 130);
   restart.addImage("restart", restartImg);
   restart.scale = 0.3;
 
@@ -88,7 +88,7 @@ function setup() {
 function draw() {
   background("white");
 
-  text("pontuação: " + pontuacao, 500, 50);
+  text("pontuação: " + pontuacao, width - 100, 50);
 
   drawSprites();
 
@@ -100,7 +100,7 @@ function draw() {
     restart.visible=false;
     // gravidade do trex
     trexSprite.velocityY = trexSprite.velocityY + 0.5;
-    if (keyIsDown(32) && trexSprite.y > 161) {
+    if ((touches.length>0 || keyIsDown(32)) && trexSprite.y > 161) {
       trexSprite.velocityY = -11;
       jumpSound.play();
     }
@@ -131,14 +131,14 @@ function draw() {
     gameOver.visible=true;
     restart.visible=true;
 
-    if (mousePressedOver(restart)) {
+    if (mousePressedOver(restart)||touches.length>0) {
       reset();
     }
   }
 }
 function criarNuvens() {
   if (frameCount % 60 == 0) {
-    var nuvens = createSprite(600, 100, 40, 10);
+    var nuvens = createSprite(width, 100, 40, 10);
     nuvens.velocityX = -3;
     nuvens.lifetime = width / -nuvens.velocityX + 50;
     nuvens.addImage(nuvensImage);
@@ -150,7 +150,7 @@ function criarNuvens() {
 }
 function criarCactos() {
   if (frameCount % 90 == 0) {
-    var cacto = createSprite(600, 165, 10, 40);
+    var cacto = createSprite(width, 165, 10, 40);
     cacto.velocityX = -(4 + pontuacao/100);
     cacto.lifetime = width / -cacto.velocityX + 50;
     var number = Math.round(random(1, 6));
